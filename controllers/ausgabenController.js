@@ -12,7 +12,7 @@ const getAllAusgaben = async (req,res)=>{
     }
 
     const ausgabensWithUser = await Promise.all(ausgabens.map(async(ausgaben)=>{
-        const user = await User.findById(ausgaben.user).lean().exec()
+        const user = await User.findById(ausgaben.userAusgaben).lean().exec()
         return{...ausgaben, username: user.username}
     }))
 
@@ -23,10 +23,10 @@ const getAllAusgaben = async (req,res)=>{
 // @route POST /ausgaben
 // @access Private
 const createNewAusgaben = async (req,res)=>{
-    const {user, expenseName, valueAusgaben, textAusgaben, boughtDate} = req.body
+    const {userAusgaben, expenseName, valueAusgaben, textAusgaben, boughtDate} = req.body
 
     // Confirm fields required
-    if(!user || !expenseName || !valueAusgaben){
+    if(!userAusgaben || !expenseName || !valueAusgaben){
         return res.status(400).json({ message: 'Insuficient given data, All fields required'})
     }
 
@@ -40,7 +40,7 @@ const createNewAusgaben = async (req,res)=>{
     */
 
     // Create and store the new ausgaben
-    const ausgaben = await Ausgaben.create({user, expenseName, valueAusgaben, textAusgaben, boughtDate})
+    const ausgaben = await Ausgaben.create({userAusgaben, expenseName, valueAusgaben, textAusgaben, boughtDate})
     if(ausgaben){
         return res.status(201).json({ message: 'New ausgaben created'})
     } else {
@@ -52,10 +52,10 @@ const createNewAusgaben = async (req,res)=>{
 // @route PATCH /ausgaben
 // @access Private
 const updateAusgaben = async (req,res)=>{
-    const {id, user, expenseName, valueAusgaben, textAusgaben, boughtDate} = req.body
+    const {id, userAusgaben, expenseName, valueAusgaben, textAusgaben, boughtDate} = req.body
 
     // Check fields
-    if(!id || !user || !expenseName || !valueAusgaben){
+    if(!id || !userAusgaben || !expenseName || !valueAusgaben){
         return res.status(400).json({ message: 'All fields are required'})
     }
 
@@ -77,7 +77,7 @@ const updateAusgaben = async (req,res)=>{
     }
 */
 
-    ausgaben.user = user
+    ausgaben.userAusgaben = userAusgaben
     ausgaben.expenseName = expenseName
     ausgaben.valueAusgaben = valueAusgaben
     ausgaben.textAusgaben = textAusgaben
