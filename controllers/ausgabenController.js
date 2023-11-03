@@ -59,7 +59,7 @@ const updateAusgaben = async (req,res)=>{
         return res.status(400).json({ message: 'All fields are required'})
     }
 
-    if(typeof boughtDate !== 'date'){
+    if(boughtDate instanceof Date){
         return res.status(400).json({ message: 'date value is required'})
     }
 
