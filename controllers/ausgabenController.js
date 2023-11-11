@@ -23,10 +23,10 @@ const getAllAusgaben = async (req,res)=>{
 // @route POST /ausgaben
 // @access Private
 const createNewAusgaben = async (req,res)=>{
-    const {userAusgaben, expenseName, valueAusgaben, textAusgaben, boughtDate} = req.body
+    const {userAusgaben, expenseName, valueAusgaben, textAusgaben, boughtDate, coinAusgaben} = req.body
 
     // Confirm fields required
-    if(!userAusgaben || !expenseName || !valueAusgaben){
+    if(!userAusgaben || !expenseName || !valueAusgaben || !coinAusgaben){
         return res.status(400).json({ message: 'Insuficient given data, All fields required'})
     }
 
@@ -40,7 +40,7 @@ const createNewAusgaben = async (req,res)=>{
     */
 
     // Create and store the new ausgaben
-    const ausgaben = await Ausgaben.create({userAusgaben, expenseName, valueAusgaben, textAusgaben, boughtDate})
+    const ausgaben = await Ausgaben.create({userAusgaben, expenseName, valueAusgaben, textAusgaben, boughtDate, coinAusgaben})
     if(ausgaben){
         return res.status(201).json({ message: 'New ausgaben created'})
     } else {
@@ -52,10 +52,10 @@ const createNewAusgaben = async (req,res)=>{
 // @route PATCH /ausgaben
 // @access Private
 const updateAusgaben = async (req,res)=>{
-    const {id, userAusgaben, expenseName, valueAusgaben, textAusgaben, boughtDate} = req.body
+    const {id, userAusgaben, expenseName, valueAusgaben, textAusgaben, boughtDate, coinAusgaben} = req.body
 
     // Check fields
-    if(!id || !userAusgaben || !expenseName || !valueAusgaben){
+    if(!id || !userAusgaben || !expenseName || !valueAusgaben || !coinAusgaben){
         return res.status(400).json({ message: 'All fields are required'})
     }
 
@@ -82,6 +82,7 @@ const updateAusgaben = async (req,res)=>{
     ausgaben.valueAusgaben = valueAusgaben
     ausgaben.textAusgaben = textAusgaben
     ausgaben.boughtDate = boughtDate
+    ausgaben.coinAusgaben = coinAusgaben
 
     const updateAusgaben = await ausgaben.save()
 
@@ -107,7 +108,7 @@ const deleteAusgaben = async (req,res)=>{
 
     const result = await ausgaben.deleteOne()
 
-    const reply = `Ausgaben '${updateAusgaben.expenseName}'  with ID ${result._id} deleted`
+    const reply = `Ausgaben '${result.expenseName}'  with ID ${result._id} deleted`
 
     res.json(reply)
 }
