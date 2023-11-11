@@ -24,7 +24,13 @@ const ausgabenSchema = new mongoose.Schema({
         type: Date,
         default: Date.now(),
         required: false
-    },/*
+    },
+    coinAusgaben: {
+        type: String,
+        default: "EUR",
+        required: true
+    },
+    /*
     completed: {
         type: Boolean,
         default: false
