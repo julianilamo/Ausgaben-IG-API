@@ -9,6 +9,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    familie:{
+        type: String,
+        required: true,
+        default: "test"
+    }
+    ,
     roles: {
         type: [String],
         default: ["Employee"]

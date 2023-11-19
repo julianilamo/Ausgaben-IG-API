@@ -19,11 +19,11 @@ const getAllUsers = async (req, res) => {
 // @route Post /users
 // @access Private
 const createNewUser = async (req, res) => {
-    const { username, password, roles } = req.body
+    const { username, password, roles, familie } = req.body
     
     // Confirm data
     // if (!username || !password || !Array.isArray(roles) || !roles.length) { // before refactoring
-    if (!username || !password) {
+    if (!username || !password || !familie) {
         // Status 400 stands for bad request
         return res.status(400).json({ message: 'All fields are required' })
     }
@@ -47,8 +47,8 @@ const createNewUser = async (req, res) => {
 //   }
 
     const userObject = (!Array.isArray(roles) || !roles.length)
-        ? { username, "password": hashedPwd }
-        : { username, "password": hashedPwd, roles}
+        ? { username, "password": hashedPwd, familie }
+        : { username, "password": hashedPwd, roles, familie}
 
     // Create and store new user
     const user = await User.create(userObject)
@@ -64,11 +64,11 @@ const createNewUser = async (req, res) => {
 // @route PATCH /users
 // @access Private
 const updateUser = async (req, res) => {
-    const { id, username, roles, active, password } = req.body
+    const { id, username, roles, active, password, familie } = req.body
 
     // Confirm data
-    if (!id || !username || !Array.isArray(roles) || !roles.length ||
-    typeof active !== 'boolean'){
+    if (!id || !username || !Array.isArray(roles) || !roles.length || !familie ||
+    typeof active !== 'boolean') {
         return res.status(400).json({ message: 'All fields are required'})
     }
 
@@ -89,6 +89,7 @@ const updateUser = async (req, res) => {
     user.username = username
     user.roles = roles
     user.active = active
+    user.familie = familie
 
     if (password) {
         // Hash password
