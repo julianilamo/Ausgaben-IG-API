@@ -30,6 +30,11 @@ const ausgabenSchema = new mongoose.Schema({
         default: "EUR",
         required: true
     },
+    categoryAusgaben: {
+        type: [String],
+        default: ["Anderes"],
+        required: false
+    },
     /*
     completed: {
         type: Boolean,
