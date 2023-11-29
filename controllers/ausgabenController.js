@@ -13,7 +13,7 @@ const getAllAusgaben = async (req,res)=>{
 
     const ausgabensWithUser = await Promise.all(ausgabens.map(async(ausgaben)=>{
         const user = await User.findById(ausgaben.userAusgaben).lean().exec()
-        return{...ausgaben, username: user.username}
+        return{...ausgaben, username: user?.username, familie: user?.familie}
     }))
 
     res.json(ausgabensWithUser)
@@ -23,7 +23,7 @@ const getAllAusgaben = async (req,res)=>{
 // @route POST /ausgaben
 // @access Private
 const createNewAusgaben = async (req,res)=>{
-    const {userAusgaben, expenseName, valueAusgaben, textAusgaben, boughtDate, coinAusgaben} = req.body
+    const {userAusgaben, expenseName, valueAusgaben, textAusgaben, boughtDate, coinAusgaben, categoryAusgaben} = req.body
 
     // Confirm fields required
     if(!userAusgaben || !expenseName || !valueAusgaben || !coinAusgaben){
@@ -40,7 +40,7 @@ const createNewAusgaben = async (req,res)=>{
     */
 
     // Create and store the new ausgaben
-    const ausgaben = await Ausgaben.create({userAusgaben, expenseName, valueAusgaben, textAusgaben, boughtDate, coinAusgaben})
+    const ausgaben = await Ausgaben.create({userAusgaben, expenseName, valueAusgaben, textAusgaben, boughtDate, coinAusgaben, categoryAusgaben})
     if(ausgaben){
         return res.status(201).json({ message: 'New ausgaben created'})
     } else {
@@ -52,7 +52,7 @@ const createNewAusgaben = async (req,res)=>{
 // @route PATCH /ausgaben
 // @access Private
 const updateAusgaben = async (req,res)=>{
-    const {id, userAusgaben, expenseName, valueAusgaben, textAusgaben, boughtDate, coinAusgaben} = req.body
+    const {id, userAusgaben, expenseName, valueAusgaben, textAusgaben, boughtDate, coinAusgaben, categoryAusgaben} = req.body
 
     // Check fields
     if(!id || !userAusgaben || !expenseName || !valueAusgaben || !coinAusgaben){
@@ -83,6 +83,7 @@ const updateAusgaben = async (req,res)=>{
     ausgaben.textAusgaben = textAusgaben
     ausgaben.boughtDate = boughtDate
     ausgaben.coinAusgaben = coinAusgaben
+    ausgaben.categoryAusgaben = categoryAusgaben
 
     const updateAusgaben = await ausgaben.save()
 
