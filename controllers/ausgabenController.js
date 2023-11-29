@@ -13,7 +13,7 @@ const getAllAusgaben = async (req,res)=>{
 
     const ausgabensWithUser = await Promise.all(ausgabens.map(async(ausgaben)=>{
         const user = await User.findById(ausgaben.userAusgaben).lean().exec()
-        return{...ausgaben, username: user.username, familie: user.familie}
+        return{...ausgaben, username: user?.username, familie: user?.familie}
     }))
 
     res.json(ausgabensWithUser)
